@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+{% block title %}Complete Appointment{% endblock %}
+{% block content %}
+
+<div class="confirm-wrap">
+    <h2>Mark as Completed</h2>
+    <p>Mark appointment for <strong>{{ appt.patient.full_name }}</strong> on <strong>{{ appt.date }}</strong> as completed?</p>
+    <div class="confirm-actions">
+        <form method="post">{% csrf_token %}<button type="submit" class="btn btn-success">Yes, Mark Complete</button></form>
+        <a href="{% url 'appointment_list' %}" class="btn btn-ghost">Go Back</a>
+    </div>
+</div>
+{% endblock %}

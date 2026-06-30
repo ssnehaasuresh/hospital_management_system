@@ -1,0 +1,83 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign In — HMS</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+<body>
+<div class="login-page">
+
+    <div class="login-left">
+        <div class="ll-brand">
+            <div class="ll-brand-mark">
+                <svg class="pulse-svg" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg">
+                    <path class="pulse-path" d="M2 16h6l3-9 4 18 3-13 2 4h10" stroke="#fff" stroke-width="2.2" fill="none" style="stroke-dasharray:60; stroke-dashoffset:0;"/>
+                </svg>
+            </div>
+            <div class="ll-brand-text">
+                <h1>HMS</h1>
+                <p>Hospital Management System</p>
+            </div>
+        </div>
+
+        <div class="ll-main">
+
+            <div class="ll-pulse-wrap">
+                <svg class="pulse-svg" viewBox="0 0 380 64" xmlns="http://www.w3.org/2000/svg">
+                    <path class="pulse-path" d="M0 32 H110 L130 8 L150 56 L170 20 L185 32 H380"
+                          stroke="#7DA6FF" stroke-width="2" fill="none"
+                          style="stroke-dasharray:600; stroke-dashoffset:600;"/>
+                </svg>
+            </div>
+
+            <h2>Healthcare management,<br><em>without the noise.</em></h2>
+
+            <div class="ll-features">
+                <div class="ll-feature"> </div>
+                <div class="ll-feature"> </div>
+                <div class="ll-feature"> </div>
+                <div class="ll-feature"> </div>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="login-right">
+        <div class="login-box">
+            <span class="l-tag">Staff Access</span>
+            <h2>Sign in</h2>
+            <span class="l-sub">Enter your credentials to continue</span>
+
+            {% if error %}
+            <div class="alert alert-error">{{ error }}</div>
+            {% endif %}
+
+            <form method="post">
+                {% csrf_token %}
+                <div class="l-field">
+                    <label>Username</label>
+                    <input type="text" name="username" placeholder="your.username" required autofocus>
+                </div>
+                <div class="l-field">
+                    <label>Password</label>
+                    <input type="password" name="password" placeholder="••••••••" required>
+                </div>
+                <button type="submit" class="l-submit">Continue →</button>
+            </form>
+
+            <div class="l-divider">
+                <div class="l-divider-line"></div><span>Secured</span><div class="l-divider-line"></div>
+            </div>
+
+            <p style="font-size:0.72rem; color:var(--t4); text-align:center; line-height:1.6;">
+                This is a restricted system. Unauthorized access is prohibited.
+            </p>
+        </div>
+    </div>
+</div>
+</body>
+</html>

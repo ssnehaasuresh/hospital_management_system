@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+{% block title %}Announcements{% endblock %}
+{% block content %}
+
+<div class="ph">
+    <div class="ph-left"><h1>Announcements</h1><p>Hospital-wide communications</p></div>
+    <div class="ph-actions">
+        {% if user.role == 'admin' or user.role == 'staff' %}
+        <a href="{% url 'announcement_create' %}" class="btn btn-accent">+ Post</a>
+        {% endif %}
+    </div>
+</div>
+
+{% for ann in announcements %}
+<div class="ann-card">
+    <h3>{{ ann.title }}</h3>
+    <p>{{ ann.message }}</p>
+    <div class="ann-meta">{{ ann.posted_by.username }} — {{ ann.posted_at|date:"M d, Y H:i" }}</div>
+</div>
+{% empty %}
+<div class="card"><div class="empty"><div class="empty-label">No announcements</div><p>Nothing posted yet.</p></div></div>
+{% endfor %}
+
+<script>setTimeout(() => location.reload(), 30000);</script>
+{% endblock %}

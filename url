@@ -1,0 +1,8 @@
+http://127.0.0.1:8000/accounts/login/      ← login page
+http://127.0.0.1:8000/patients/            ← patient list
+http://127.0.0.1:8000/patients/new/        ← add patient
+http://127.0.0.1:8000/appointments/        ← appointment list
+http://127.0.0.1:8000/appointments/new/    ← book appointment
+http://127.0.0.1:8000/leaves/              ← leave requests
+http://127.0.0.1:8000/leaves/new/          ← request leave
+http://127.0.0.1:8000/announcements/       ← announcements

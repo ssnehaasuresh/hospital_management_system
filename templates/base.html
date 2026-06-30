@@ -1,0 +1,100 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}HMS{% endblock %}</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+<body>
+
+{% if user.is_authenticated %}
+<aside class="sidebar">
+    <div class="sidebar-brand">
+        <a href="/dashboard/" class="brand-logo">
+            <div class="brand-mark">
+                <svg class="pulse-svg" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg">
+                    <path class="pulse-path" d="M2 16h6l3-9 4 18 3-13 2 4h10" stroke="#fff" stroke-width="2.2" fill="none" style="stroke-dasharray:60; stroke-dashoffset:0;"/>
+                </svg>
+            </div>
+            <div>
+                <div class="brand-name">HMS</div>
+                <div class="brand-sub">Hospital System</div>
+            </div>
+        </a>
+    </div>
+
+    <div class="sidebar-user">
+        <div class="user-av">{{ user.username|first|upper }}</div>
+        <div class="user-meta">
+            <div class="user-name">{{ user.get_full_name|default:user.username }}</div>
+            <div class="user-role-tag">{{ user.role }}</div>
+        </div>
+    </div>
+
+    <nav class="sidebar-nav">
+        <div class="nav-section">Main</div>
+        <a href="/dashboard/" class="nav-item {% if request.path == '/dashboard/' %}active{% endif %}">
+            <span class="nav-dot"></span> Dashboard
+        </a>
+        <a href="/patients/" class="nav-item {% if '/patients/' in request.path %}active{% endif %}">
+            <span class="nav-dot"></span> Patients
+        </a>
+        <a href="/appointments/" class="nav-item {% if '/appointments/' in request.path %}active{% endif %}">
+            <span class="nav-dot"></span> Appointments
+        </a>
+
+        <div class="nav-section">Management</div>
+        {% if user.role == 'doctor'%}
+        <a href="/leaves/" class="nav-item {% if request.path == '/leaves/' %}active{% endif %}">
+            <span class="nav-dot"></span> My Leaves
+        </a>
+        {% endif %}
+        {% if user.role == 'admin' %}
+        <a href="/leaves/all/" class="nav-item {% if '/leaves/all' in request.path %}active{% endif %}">
+            <span class="nav-dot"></span> Leave Approvals
+        </a>
+        {% endif %}
+        <a href="/announcements/" class="nav-item {% if '/announcements/' in request.path %}active{% endif %}">
+            <span class="nav-dot"></span> Announcements
+        </a>
+
+        {% if user.role == 'admin' %}
+        <div class="nav-section">Admin</div>
+        <a href="/admin/" class="nav-item">
+            <span class="nav-dot"></span> Admin Panel
+        </a>
+        {% endif %}
+    </nav>
+
+    <div class="sidebar-footer">
+        <a href="/accounts/logout/" class="logout-link">
+            <span class="nav-dot"></span> Sign Out
+        </a>
+    </div>
+</aside>
+
+<div class="main">
+    <div class="topbar">
+        <div class="topbar-left">{% block topbar_title %}{% endblock %}</div>
+        <div class="topbar-right">
+            <span class="topbar-date" id="js-date"></span>
+        </div>
+    </div>
+    <div class="content">
+        {% block content %}{% endblock %}
+    </div>
+</div>
+{% endif %}
+<script>
+const el = document.getElementById('js-date');
+if (el) {
+    el.textContent = new Date().toLocaleDateString('en-US', {
+        weekday: 'short', month: 'short', day: 'numeric', year: 'numeric'
+    });
+}
+</script>
+</body>
+</html>

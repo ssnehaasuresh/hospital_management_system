@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+{% block title %}Patients{% endblock %}
+{% block content %}
+
+<div class="ph">
+    <div class="ph-left">
+        <h1>Patients</h1>
+        <p>All registered patients in the system</p>
+    </div>
+    <div class="ph-actions">
+        {% if user.role == 'staff' or user.role == 'admin'%}
+        <a href="{% url 'patient_create' %}" class="btn btn-accent">+ Add Patient</a>
+        {% endif %}
+    </div>
+</div>
+
+<div class="tbl-wrap">
+    <table>
+        <thead>
+            <tr><th>Name</th><th>Date of Birth</th><th>Phone</th><th>Registered</th><th>Actions</th></tr>
+        </thead>
+        <tbody>
+            {% for patient in patients %}
+            <tr>
+                <td style="font-weight:600; color:var(--t1);">{{ patient.full_name }}</td>
+                <td>{{ patient.date_of_birth }}</td>
+                <td>{{ patient.phone }}</td>
+                <td>{{ patient.created_at|date:"M d, Y" }}</td>
+                <td>
+                    <a href="{% url 'patient_detail' patient.pk %}" class="btn btn-ghost btn-sm">View</a>
+                    <a href="{% url 'patient_edit' patient.pk %}" class="btn btn-ghost btn-sm">Edit</a>
+                </td>
+            </tr>
+            {% empty %}
+            <tr><td colspan="5"><div class="empty"><div class="empty-label">No patients</div><p>Add your first patient to get started.</p></div></td></tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

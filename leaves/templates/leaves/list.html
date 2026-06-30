@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+{% block title %}My Leaves{% endblock %}
+{% block content %}
+
+<div class="ph">
+    <div class="ph-left"><h1>My Leave Requests</h1><p>Your submitted leave history</p></div>
+    <div class="ph-actions"><a href="{% url 'leave_create' %}" class="btn btn-accent">+ Request Leave</a></div>
+</div>
+
+<div class="tbl-wrap">
+    <table>
+        <thead><tr><th>From</th><th>To</th><th>Reason</th><th>Status</th></tr></thead>
+        <tbody>
+            {% for leave in leaves %}
+            <tr>
+                <td>{{ leave.start_date }}</td>
+                <td>{{ leave.end_date }}</td>
+                <td>{{ leave.reason|truncatechars:60 }}</td>
+                <td><span class="badge badge-{{ leave.status }}">{{ leave.status }}</span></td>
+            </tr>
+            {% empty %}
+            <tr><td colspan="4"><div class="empty"><div class="empty-label">No requests</div><p>You haven't submitted any leave requests.</p></div></td></tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

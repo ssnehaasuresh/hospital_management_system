@@ -1,0 +1,44 @@
+{% extends 'base.html' %}
+{% block title %}{{ patient.full_name }}{% endblock %}
+{% block content %}
+
+<div class="ph">
+    <div class="ph-left">
+        <h1>{{ patient.full_name }}</h1>
+        <p>Patient record</p>
+    </div>
+    <div class="ph-actions">
+        <a href="{% url 'patient_edit' patient.pk %}" class="btn btn-white">Edit</a>
+        <a href="{% url 'patient_delete' patient.pk %}" class="btn btn-danger">Delete</a>
+    </div>
+</div>
+
+<div class="detail-card" style="margin-bottom:2rem;">
+    <div class="detail-row"><div class="detail-key">Date of Birth</div><div class="detail-val">{{ patient.date_of_birth }}</div></div>
+    <div class="detail-row"><div class="detail-key">Phone</div><div class="detail-val">{{ patient.phone }}</div></div>
+    <div class="detail-row"><div class="detail-key">Address</div><div class="detail-val">{{ patient.address|default:"—" }}</div></div>
+    <div class="detail-row"><div class="detail-key">Registered</div><div class="detail-val">{{ patient.created_at|date:"M d, Y" }}</div></div>
+</div>
+
+<div class="ph"><div class="ph-left"><h1 style="font-size:1.2rem;">Appointment History</h1></div></div>
+
+<div class="tbl-wrap">
+    <table>
+        <thead><tr><th>Date</th><th>Slot</th><th>Doctor</th><th>Status</th></tr></thead>
+        <tbody>
+            {% for appt in appointments %}
+            <tr>
+                <td>{{ appt.date }}</td>
+                <td>{{ appt.get_slot_display }}</td>
+                <td>{{ appt.staff.get_full_name|default:appt.staff.username }}</td>
+                <td><span class="badge badge-{{ appt.status }}">{{ appt.status }}</span></td>
+            </tr>
+            {% empty %}
+            <tr><td colspan="4"><div class="empty"><div class="empty-label">No appointments</div><p>No history for this patient.</p></div></td></tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+<a href="{% url 'patient_list' %}" class="btn btn-ghost" style="margin-top:1.5rem;">← Back to Patients</a>
+{% endblock %}

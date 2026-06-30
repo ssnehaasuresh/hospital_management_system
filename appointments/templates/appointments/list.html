@@ -1,0 +1,44 @@
+{% extends 'base.html' %}
+{% block title %}Appointments{% endblock %}
+{% block content %}
+
+<div class="ph">
+    <div class="ph-left">
+        <h1>Appointments</h1>
+        <p>All scheduled appointments</p>
+    </div>
+    <div class="ph-actions">
+        {% if user.role != 'doctor' %}
+        <a href="{% url 'appointment_create' %}" class="btn btn-accent">+ Book Appointment</a>
+        {% endif %}
+    </div>
+</div>
+
+<div class="tbl-wrap">
+    <table>
+        <thead><tr><th>Patient</th><th>Doctor</th><th>Date</th><th>Slot</th><th>Status</th><th>Actions</th></tr></thead>
+        <tbody>
+            {% for appt in appointments %}
+            <tr>
+                <td style="font-weight:600; color:var(--t1);">{{ appt.patient.full_name }}</td>
+                <td>{{ appt.staff.get_full_name|default:appt.staff.username }}</td>
+                <td>{{ appt.date }}</td>
+                <td>{{ appt.get_slot_display }}</td>
+                <td><span class="badge badge-{{ appt.status }}">{{ appt.status }}</span></td>
+                <td style="display:flex; gap:0.4rem;">
+                    <a href="{% url 'appointment_detail' appt.pk %}" class="btn btn-ghost btn-sm">View</a>
+                    {% if appt.status == 'scheduled' %}
+                        {% if user.role == 'doctor' %}
+                        <a href="{% url 'appointment_complete' appt.pk %}" class="btn btn-success btn-sm">Complete</a>
+                        {% endif %}
+                        <a href="{% url 'appointment_cancel' appt.pk %}" class="btn btn-danger btn-sm">Cancel</a>
+                    {% endif %}
+                </td>
+            </tr>
+            {% empty %}
+            <tr><td colspan="6"><div class="empty"><div class="empty-label">No appointments</div><p>Nothing scheduled yet.</p></div></td></tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

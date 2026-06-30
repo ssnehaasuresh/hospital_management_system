@@ -1,0 +1,60 @@
+{% extends 'base.html' %}
+{% block title %}Dashboard{% endblock %}
+{% block topbar_title %}Dashboard{% endblock %}
+{% block content %}
+
+<div class="hero">
+    <div class="hero-text">
+        <div class="hero-tag">Admin Overview</div>
+        <h2>{{ user.get_full_name|default:user.username }}</h2>
+        <p>Hospital operations summary for today.</p>
+        <div class="hero-actions">
+            <a href="/patients/new/" class="btn btn-accent btn-sm">+ New Patient</a>
+            <a href="/appointments/new/" class="btn btn-white btn-sm">+ Book Appointment</a>
+            <a href="/announcements/new/" class="btn btn-white btn-sm">Post Announcement</a>
+        </div>
+    </div>
+    <div class="hero-pulse">
+        <svg class="pulse-svg" viewBox="0 0 160 60" xmlns="http://www.w3.org/2000/svg">
+            <path class="pulse-path" d="M0 30 H50 L62 8 L74 52 L86 18 L96 30 H160"
+                  stroke="#7DA6FF" stroke-width="2" fill="none"
+                  style="stroke-dasharray:300; stroke-dashoffset:300;"/>
+        </svg>
+    </div>
+</div>
+
+<div class="stats">
+    <div class="stat"><div class="stat-n accent">{{ patient_count }}</div><div class="stat-l">Total Patients</div></div>
+    <div class="stat"><div class="stat-n blue">{{ todays_appointments }}</div><div class="stat-l">Appointments Today</div></div>
+    <div class="stat"><div class="stat-n orange">{{ pending_leaves }}</div><div class="stat-l">Pending Leaves</div></div>
+    <div class="stat"><div class="stat-n purple">{{ announcement_count }}</div><div class="stat-l">Announcements</div></div>
+</div>
+
+<div class="g2">
+    <div class="card">
+        <div class="card-h"><h3>Today's Appointments</h3><a href="/appointments/" class="btn btn-ghost btn-sm">View all</a></div>
+        {% for appt in recent_appointments %}
+        <div class="feed-item">
+            <div>
+                <div class="feed-main">{{ appt.patient.full_name }}</div>
+                <div class="feed-sub">Dr. {{ appt.staff.get_full_name|default:appt.staff.username }} — {{ appt.get_slot_display }}</div>
+            </div>
+            <span class="badge badge-{{ appt.status }}">{{ appt.status }}</span>
+        </div>
+        {% empty %}
+        <div class="empty"><div class="empty-label">No appointments</div><p>Nothing scheduled for today.</p></div>
+        {% endfor %}
+    </div>
+
+    <div class="card">
+        <div class="card-h"><h3>Announcements</h3><a href="/announcements/" class="btn btn-ghost btn-sm">View all</a></div>
+        {% for ann in recent_announcements %}
+        <div class="feed-item">
+            <div><div class="feed-main">{{ ann.title }}</div><div class="feed-sub">{{ ann.posted_at|date:"M d, Y" }} — {{ ann.posted_by.username }}</div></div>
+        </div>
+        {% empty %}
+        <div class="empty"><div class="empty-label">No announcements</div><p>Nothing posted yet.</p></div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}
